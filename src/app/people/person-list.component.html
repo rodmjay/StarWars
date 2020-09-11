@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-header">
+    {{pageTitle}}
+  </div>
+
+  <div class="card-body">
+
+    <div class="table-responsive">
+      <table class="table mb-0"
+             *ngIf="people$ | async as people">
+        <thead>
+          <tr>
+            <th>Person</th>
+            <th>Birthday</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let person of people">
+          <tr>
+            <td>{{ person.name }}</td>
+            <td>{{ person.birth_year }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="alert alert-danger"
+     *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>

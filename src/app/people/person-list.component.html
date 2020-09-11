@@ -5,19 +5,28 @@
 
   <div class="card-body">
 
+    <div class="input-group">
+
+      <input type="text" class="form-control" placeholder="Person Name">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button">Search</button>
+      </div>
+    </div>
+
     <div class="table-responsive">
-      <table class="table mb-0"
-             *ngIf="people$ | async as people">
+      <table class="table mb-0" *ngIf="people$ | async as people">
         <thead>
           <tr>
             <th>Person</th>
             <th>Birthday</th>
+            <th>Home World Name</th>
           </tr>
         </thead>
         <tbody *ngFor="let person of people">
           <tr>
             <td>{{ person.name }}</td>
             <td>{{ person.birth_year }}</td>
+            <td>{{ person.homeworld_name }}</td>
           </tr>
         </tbody>
       </table>
@@ -26,7 +35,6 @@
   </div>
 </div>
 
-<div class="alert alert-danger"
-     *ngIf="errorMessage">
+<div class="alert alert-danger" *ngIf="errorMessage">
   {{ errorMessage }}
 </div>

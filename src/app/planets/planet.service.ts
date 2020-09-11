@@ -1,46 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, empty, throwError, combineLatest } from 'rxjs';
+import { Observable, empty, throwError } from 'rxjs';
 import { catchError, map, reduce, expand } from 'rxjs/operators';
 
-import { Person, Response } from './person';
-import { PlanetService } from '../planets/planet.service';
+import { Planet } from './planet';
+import { Response } from '../people/person';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PersonService {
+export class PlanetService {
 
-  constructor(private http: HttpClient, private planetService: PlanetService) {
-
-  }
-
-  peopleWithHomeWorld$ = combineLatest([this.getPeople(), this.planetService.getPlanets()]).pipe(
-    map(([people, planets]) => {
-      console.log(planets);
-      return people.map(person => ({
-        ...person,
-        homeworld_name: planets.find(p => p.url === person.homeworld).name
-      }) as Person);
-    }
-    )
-  );
-
-  private getPage(url: string): Observable<{ next: string, results: Person[] }> {
-    return this.http.get<Response<Person[]>>(url).pipe(
+  private getPage(url: string): Observable<{ next: string, results: Planet[] }> {
+    return this.http.get<Response<Planet[]>>(url).pipe(
       map(response => {
         return {
           next: response.next,
-          results: response.results as Person[]
+          results: response.results as Planet[]
         };
       })
     );
   }
 
-  getPeople(): Observable<Person[]> {
+  getPlanets(): Observable<Planet[]> {
     return Observable.create(observer => {
-      this.getPage('https://swapi.dev/api/people/?format=json').pipe(
+      this.getPage('https://swapi.dev/api/planets/?format=json').pipe(
         expand(data => {
           return data.next ? this.getPage(data.next) : empty();
         }),
@@ -48,11 +33,16 @@ export class PersonService {
           return acc.concat(data.results);
         }, []),
         catchError(this.handleError)
-      ).subscribe((people) => {
-        observer.next(people);
+      ).subscribe((planets) => {
+        observer.next(planets);
         observer.complete();
       });
+
     });
+  }
+
+  constructor(private http: HttpClient) {
+
   }
 
   private handleError(err: any) {

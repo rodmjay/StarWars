@@ -1,8 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PersonService } from './person.service';
-import { EMPTY } from 'rxjs';
+import { EMPTY, combineLatest } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { PlanetService } from '../planets/planet.service';
 
 @Component({
   templateUrl: './person-list.component.html',
@@ -13,7 +14,7 @@ export class PersonListComponent {
   pageTitle = 'Person List';
   errorMessage = '';
 
-  people$ = this.personService.getPeople()
+  people$ = this.personService.peopleWithHomeWorld$
     .pipe(
       tap(x => console.log(x)),
       catchError(err => {
@@ -22,6 +23,7 @@ export class PersonListComponent {
       })
     );
 
-  constructor(private personService: PersonService) { }
+  constructor(private personService: PersonService, private planetService: PlanetService) {
 
+  }
 }

@@ -2,6 +2,8 @@
 export interface Person {
   name: string;
   birth_year: string;
+  homeworld: string;
+  homeworkd_name: string;
 }
 
 

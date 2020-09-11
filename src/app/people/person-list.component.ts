@@ -15,9 +15,10 @@ export class PersonListComponent {
   pageTitle = 'Person List';
   errorMessage = '';
   people$: Observable<Person[]>;
+  filter = '';
 
-  search(filter: string = null) {
-    this.people$ = this.personService.getPeopleWithHomeworld(filter)
+  search() {
+    this.people$ = this.personService.getPeopleWithHomeworld(this.filter)
       .pipe(
         catchError(err => {
           this.errorMessage = err;
@@ -26,7 +27,13 @@ export class PersonListComponent {
       );
   }
 
+  clear() {
+    this.filter = '';
+    this.search();
+  }
+
   constructor(private personService: PersonService, private planetService: PlanetService) {
+
     this.search();
   }
 }

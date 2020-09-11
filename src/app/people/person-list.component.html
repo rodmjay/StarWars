@@ -6,9 +6,10 @@
   <div class="card-body">
 
     <div class="input-group">
-      <input #filter type="text" class="form-control" placeholder="Person Name">
+      <input [(ngModel)]='filter' type="text" class="form-control" placeholder="Person Name">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" (click)="search(filter.value)">Search</button>
+        <button class="btn btn-outline-secondary" type="button" (click)="clear()">Clear</button>
       </div>
     </div>
 

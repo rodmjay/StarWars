@@ -16,16 +16,24 @@ export class PersonService {
 
   }
 
-  peopleWithHomeWorld$ = combineLatest([this.getPeople(), this.planetService.getPlanets()]).pipe(
-    map(([people, planets]) => {
-      console.log(planets);
-      return people.map(person => ({
-        ...person,
-        homeworld_name: planets.find(p => p.url === person.homeworld).name
-      }) as Person);
-    }
-    )
-  );
+  getPeopleWithHomeworld(search: string = null): Observable<Person[]> {
+    return combineLatest([this.getPeople(search), this.planetService.getPlanets()]).pipe(
+      map(([people, planets]) => {
+        return people.map(person => ({
+          ...person,
+          homeworld_name: planets
+            .find(p => p.url === person.homeworld)
+              .name
+        }) as Person);
+      })
+    );
+  }
+
+  private getUrlWithSearch(search: string): string {
+    return !!search
+      ? `https://swapi.dev/api/people/?format=json&search=${search}`
+      : 'https://swapi.dev/api/people/?format=json';
+  }
 
   private getPage(url: string): Observable<{ next: string, results: Person[] }> {
     return this.http.get<Response<Person[]>>(url).pipe(
@@ -38,9 +46,9 @@ export class PersonService {
     );
   }
 
-  getPeople(): Observable<Person[]> {
+  getPeople(search: string = null): Observable<Person[]> {
     return Observable.create(observer => {
-      this.getPage('https://swapi.dev/api/people/?format=json').pipe(
+      this.getPage(this.getUrlWithSearch(search)).pipe(
         expand(data => {
           return data.next ? this.getPage(data.next) : empty();
         }),

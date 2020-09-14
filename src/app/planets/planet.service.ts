@@ -5,7 +5,7 @@ import { Observable, empty, throwError } from 'rxjs';
 import { catchError, map, reduce, expand, shareReplay } from 'rxjs/operators';
 
 import { Planet } from './planet';
-import { Response } from '../people/person';
+import { Response } from '../shared/models';
 
 @Injectable({
   providedIn: 'root'

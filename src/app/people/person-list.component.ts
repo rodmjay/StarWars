@@ -16,7 +16,7 @@ export class PersonListComponent {
   errorMessage = '';
   filter = '';
   page = 1;
-  pageSize: 5;
+  size = 5;
 
   people$ = this.personService.people$
     .pipe(
@@ -27,28 +27,39 @@ export class PersonListComponent {
       })
     );
 
-  search() {
-    console.log('filter', this.filter);
-    this.personService.peoplefiltered(this.filter);
+
+  refresh() {
+    console.log('actions', [this.page, this.size, this.filter]);
+    this.personService.refresh(this.page, this.size, this.filter);
   }
 
-  doPaging() {
-    this.personService.peoplePaging(this.page, this.pageSize);
+  search(filter: string) {
+    if (filter !== this.filter) {
+      this.page = 1;
+    }
+    this.refresh();
   }
 
   clear() {
+    this.pageSize = 5;
+    this.page = 1;
     this.filter = '';
-    this.search();
+    this.refresh();
+  }
+
+  setPage(page: number) {
+    this.page = page;
+    this.refresh();
   }
 
   next() {
     this.page++;
-    this.doPaging();
+    this.refresh();
   }
 
   prev() {
     this.page--;
-    this.doPaging();
+    this.refresh();
   }
 
   constructor(private personService: PersonService) {

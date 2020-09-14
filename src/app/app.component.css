@@ -40,3 +40,7 @@
         transform: rotate(359deg);
     }
 }
+
+a {
+    cursor:pointer;
+}

@@ -5,7 +5,7 @@ import { Observable, empty, throwError, combineLatest, BehaviorSubject } from 'r
 import { catchError, map, reduce, expand, shareReplay, switchMap, tap, take } from 'rxjs/operators';
 
 import { Person } from './person';
-import { Response, Paging } from '../shared/models';
+import { Response, Paging, Wrapper } from '../shared/models';
 import { PlanetService } from '../planets/planet.service';
 
 @Injectable({
@@ -13,29 +13,42 @@ import { PlanetService } from '../planets/planet.service';
 })
 export class PersonService {
 
-  private peoplePagingSubject = new BehaviorSubject<{ page: number, size: number }>({ page: 1, size: 5 });
-  private peopleFilteredSubject = new BehaviorSubject<string>('');
+  private listSubject = new BehaviorSubject<{ page: number, size: number, filter: string }>({ page: 1, size: 5, filter: '' });
 
-  peopleFilteredAction$ = this.peopleFilteredSubject.asObservable();
-  peoplePagingAction$ = this.peoplePagingSubject.asObservable();
+  listActions$ = this.listSubject.asObservable();
 
-  people$ = combineLatest([this.planetService.planets$, this.peopleFilteredAction$, this.peoplePagingAction$]).pipe(
-    switchMap(([planets, filter, paging]) => {
-      console.log('paging', paging);
-      return this.getPeople(filter).pipe(
-        map(people => {
-          return people.map(person => ({
-            ...person,
-            homeworld_name: planets
-              .find(p => p.url === person.homeworld)
-              .name
-          }) as Person);
-        }),
-        map((response: Person[]) => response.slice((paging.page - 1) * paging.size, paging.page * paging.size))
-      );
-    }),
-    catchError(this.handleError)
-  );
+  people$: Observable<Wrapper<Person[]>> =
+    combineLatest([this.planetService.planets$, this.listActions$]).pipe(
+      switchMap(([planets, actions]) => {
+        return this.getPeople(actions.filter).pipe(
+          map(people => {
+            return people.map(person => ({
+              ...person,
+              homeworld_name: planets
+                .find(p => p.url === person.homeworld)
+                .name
+            }) as Person);
+          }),
+          map((response: Person[]) => {
+
+            const count = response.length;
+
+            console.log('actions', actions);
+
+            // custom paging logic
+            const wrapper: Wrapper<Person[]> = {
+              page: actions.page,
+              size: actions.size,
+              pages: Math.floor((response.length + actions.size - 1) / actions.size),
+              results: response.slice((actions.page - 1) * actions.size, actions.page * actions.size),
+            };
+
+            return wrapper;
+          })
+        );
+      }),
+      catchError(this.handleError)
+    );
 
   getPeople(filter: string): Observable<Person[]> {
     return this.getPage(this.getUrlWithSearch(filter)).pipe(
@@ -50,15 +63,11 @@ export class PersonService {
 
 
   constructor(private http: HttpClient, private planetService: PlanetService) {
+
   }
 
-  peoplefiltered(search: string): void {
-    this.peopleFilteredSubject.next(search);
-  }
-
-  peoplePaging(page: number = 1, size: number = 5): void {
-    console.log('personService.paging', page, size);
-    this.peoplePagingSubject.next({ page, size });
+  refresh(page: number = 1, size: number = 5, filter: string = ''): void {
+    this.listSubject.next({ page, size, filter });
   }
 
   private getUrlWithSearch(filter: string): string {

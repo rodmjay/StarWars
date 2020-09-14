@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" *ngIf="people$ | async as people">
   <div class="card-header">
     {{pageTitle}}
   </div>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="table-responsive">
-      <table class="table mb-0" *ngIf="people$ | async as people">
+      <table class="table mb-0">
         <thead>
           <tr>
             <th>Person</th>
@@ -22,7 +22,7 @@
             <th>Home World Name</th>
           </tr>
         </thead>
-        <tbody *ngFor="let person of people">
+        <tbody *ngFor="let person of people.results">
           <tr>
             <td>{{ person.name }}</td>
             <td>{{ person.birth_year }}</td>
@@ -34,9 +34,9 @@
     <nav aria-label="Page navigation example">
       <ul class="pagination">
         <li class="page-item"><a class="page-link" (click)="prev()">Previous</a></li>
-        <li class="page-item"><a class="page-link">1</a></li>
-        <li class="page-item"><a class="page-link">2</a></li>
-        <li class="page-item"><a class="page-link">3</a></li>
+        <li class="page-item" *ngFor="let item of [].constructor(people.pages); let i = index"><a class="page-link" (click)="setPage(i+1)">
+            {{ i+1 }}
+          </a></li>
         <li class="page-item"><a class="page-link" (click)="next()">Next</a></li>
       </ul>
     </nav>

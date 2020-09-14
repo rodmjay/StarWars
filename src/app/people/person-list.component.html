@@ -33,11 +33,15 @@
     </div>
     <nav aria-label="Page navigation example">
       <ul class="pagination">
-        <li class="page-item"><a class="page-link" (click)="prev()">Previous</a></li>
-        <li class="page-item" *ngFor="let item of [].constructor(people.pages); let i = index"><a class="page-link" (click)="setPage(i+1)">
+        <li *ngIf="people.page > 1" class="page-item">
+          <a class="page-link" (click)="prev()">Previous</a>
+        </li>
+        <li [ngClass]="{'page-item' : true, 'active': i+1 == page}" *ngFor="let item of [].constructor(people.pages); let i = index">
+          <a class="page-link" (click)="setPage(i+1)">
             {{ i+1 }}
-          </a></li>
-        <li class="page-item"><a class="page-link" (click)="next()">Next</a></li>
+          </a>
+        </li>
+        <li *ngIf="people.pages > people.page" class="page-item"><a class="page-link" (click)="next()">Next</a></li>
       </ul>
     </nav>
   </div>

@@ -31,7 +31,7 @@
         </tbody>
       </table>
     </div>
-    <nav aria-label="Page navigation example">
+    <nav *ngIf="people.pages > 1" style="margin-top: 20px;">
       <ul class="pagination">
         <li *ngIf="people.page > 1" class="page-item">
           <a class="page-link" (click)="prev()">Previous</a>

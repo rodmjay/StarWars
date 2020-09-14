@@ -14,17 +14,20 @@ import { Person } from './person';
 export class PersonListComponent {
   pageTitle = 'Person List';
   errorMessage = '';
-  people$: Observable<Person[]>;
   filter = '';
 
+  people$ = this.personService.people$
+    .pipe(
+      tap(x => console.log(x)),
+      catchError(err => {
+        this.errorMessage = err;
+        return EMPTY;
+      })
+    );
+
   search() {
-    this.people$ = this.personService.getPeopleWithHomeworld(this.filter)
-      .pipe(
-        catchError(err => {
-          this.errorMessage = err;
-          return EMPTY;
-        })
-      );
+    console.log('filter', this.filter);
+    this.personService.peoplefiltered(this.filter);
   }
 
   clear() {
@@ -32,8 +35,6 @@ export class PersonListComponent {
     this.search();
   }
 
-  constructor(private personService: PersonService, private planetService: PlanetService) {
-
-    this.search();
+  constructor(private personService: PersonService) {
   }
 }

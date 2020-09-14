@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, empty, throwError } from 'rxjs';
-import { catchError, map, reduce, expand } from 'rxjs/operators';
+import { catchError, map, reduce, expand, shareReplay } from 'rxjs/operators';
 
 import { Planet } from './planet';
 import { Response } from '../people/person';
@@ -11,6 +11,18 @@ import { Response } from '../people/person';
   providedIn: 'root'
 })
 export class PlanetService {
+
+  planets$: Observable<Planet[]> = this.getPage('http://swapi.dev/api/planets/?format=json')
+    .pipe(
+      expand(data => {
+        return data.next ? this.getPage(data.next) : empty();
+      }),
+      reduce((acc, data) => {
+        return acc.concat(data.results);
+      }, []),
+      // shareReplay({ bufferSize: 1, refCount: true }),
+      catchError(this.handleError)
+    );
 
   private getPage(url: string): Observable<{ next: string, results: Planet[] }> {
     return this.http.get<Response<Planet[]>>(url).pipe(
@@ -21,24 +33,6 @@ export class PlanetService {
         };
       })
     );
-  }
-
-  getPlanets(): Observable<Planet[]> {
-    return Observable.create(observer => {
-      this.getPage('https://swapi.dev/api/planets/?format=json').pipe(
-        expand(data => {
-          return data.next ? this.getPage(data.next) : empty();
-        }),
-        reduce((acc, data) => {
-          return acc.concat(data.results);
-        }, []),
-        catchError(this.handleError)
-      ).subscribe((planets) => {
-        observer.next(planets);
-        observer.complete();
-      });
-
-    });
   }
 
   constructor(private http: HttpClient) {

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, empty, throwError, combineLatest, BehaviorSubject } from 'rxjs';
+import { Observable, empty, throwError, combineLatest, BehaviorSubject, of } from 'rxjs';
 import { catchError, map, reduce, expand, shareReplay, switchMap, tap, take } from 'rxjs/operators';
 
 import { Person } from './person';
 import { Response, Paging, Wrapper } from '../shared/models';
 import { PlanetService } from '../planets/planet.service';
+import { CachingService } from '../caching/caching.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,16 +23,17 @@ export class PersonService {
       switchMap(([planets, actions]) => {
         return this.getPeople(actions.filter).pipe(
           map(people => {
-            return people.map(person => ({
+
+            // custom mapping logic
+            const personList = people.map(person => ({
               ...person,
               homeworld_name: planets
                 .find(p => p.url === person.homeworld)
                 .name
             }) as Person);
+            return personList;
           }),
           map((response: Person[]) => {
-
-            const count = response.length;
 
             console.log('actions', actions);
 
@@ -51,18 +53,34 @@ export class PersonService {
     );
 
   getPeople(filter: string): Observable<Person[]> {
+
+    let retVal: Person[];
+
+
+    if (filter === '' && this.caching.getItem<Person[]>('people')) {
+      retVal = this.caching.getItem<Person[]>('people');
+      return of(retVal);
+    }
+
     return this.getPage(this.getUrlWithSearch(filter)).pipe(
       expand(data => {
         return data.next ? this.getPage(data.next) : empty();
       }),
       reduce((acc, data) => {
-        return acc.concat(data.results);
+
+        retVal = acc.concat(data.results);
+
+        if (filter === '') {
+          this.caching.setItem<Person[]>('people', retVal);
+        }
+
+        return retVal;
       }, [])
     );
   }
 
 
-  constructor(private http: HttpClient, private planetService: PlanetService) {
+  constructor(private http: HttpClient, private planetService: PlanetService, private caching: CachingService) {
 
   }
 

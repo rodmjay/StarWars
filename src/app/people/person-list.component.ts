@@ -1,10 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PersonService } from './person.service';
-import { EMPTY, combineLatest, Observable } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { PlanetService } from '../planets/planet.service';
-import { Person } from './person';
 
 @Component({
   templateUrl: './person-list.component.html',
@@ -18,9 +16,10 @@ export class PersonListComponent {
   page = 1;
   size = 5;
 
+  options = [{ value: 5 }, { value: 10 }, { value: 15 }];
+
   people$ = this.personService.people$
     .pipe(
-      tap(x => console.log(x)),
       catchError(err => {
         this.errorMessage = err;
         return EMPTY;
@@ -33,6 +32,7 @@ export class PersonListComponent {
     this.personService.refresh(this.page, this.size, this.filter);
   }
 
+
   search(filter: string) {
     if (filter !== this.filter) {
       this.page = 1;
@@ -41,7 +41,7 @@ export class PersonListComponent {
   }
 
   clear() {
-    this.pageSize = 5;
+    this.size = 5;
     this.page = 1;
     this.filter = '';
     this.refresh();

@@ -5,10 +5,3 @@ export interface Person {
   homeworld: string;
   homeworld_name: string;
 }
-
-
-export interface Response<T> {
-  results: T;
-  count: number;
-  next: string;
-}

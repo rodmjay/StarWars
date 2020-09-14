@@ -15,6 +15,8 @@ export class PersonListComponent {
   pageTitle = 'Person List';
   errorMessage = '';
   filter = '';
+  page = 1;
+  pageSize: 5;
 
   people$ = this.personService.people$
     .pipe(
@@ -30,9 +32,23 @@ export class PersonListComponent {
     this.personService.peoplefiltered(this.filter);
   }
 
+  doPaging() {
+    this.personService.peoplePaging(this.page, this.pageSize);
+  }
+
   clear() {
     this.filter = '';
     this.search();
+  }
+
+  next() {
+    this.page++;
+    this.doPaging();
+  }
+
+  prev() {
+    this.page--;
+    this.doPaging();
   }
 
   constructor(private personService: PersonService) {

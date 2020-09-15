@@ -3,6 +3,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { FavoriteService } from '../favorites/favorite.service';
+import { SortablejsOptions } from 'ngx-sortablejs';
+import { Person } from '../people/person';
 
 @Component({
   templateUrl: './favorite-list.component.html',
@@ -13,11 +15,27 @@ export class FavoriteListComponent {
   pageTitle = 'Favorite People';
   errorMessage = '';
 
-  constructor(private favorites: FavoriteService) {
+  public people: Person[];
 
+  constructor(private favorites: FavoriteService) {
+    this.favorites.favorites$.subscribe(x => {
+      this.people = x;
+    });
   }
 
+  eventOptions: SortablejsOptions = {
+    onUpdate: () => {
+      this.favorites.people = this.people;
+      this.favorites.favorites$.subscribe(x => {
+        this.people = x;
+      });
+    }
+  };
+
   favorites$ = this.favorites.favorites$.pipe(
-    tap(x => console.log('favorites'))
+    catchError(err => {
+      this.errorMessage = err;
+      return EMPTY;
+    })
   );
 }

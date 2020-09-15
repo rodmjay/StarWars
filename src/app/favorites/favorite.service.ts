@@ -16,9 +16,6 @@ export class FavoriteService {
   }
 
   set people(value: Person[]) {
-
-    console.log('peopleToAdd', value);
-
     this.favoritesSubject.next(value);
     this.caching.setItem<Person[]>('favorites', value);
   }
@@ -26,10 +23,8 @@ export class FavoriteService {
   get people(): Person[] {
     let ppl = this.caching.getItem<Person[]>('favorites');
     if (ppl === null) {
-      ppl = [];
-      this.people = [];
+      this.people = ppl = [];
     }
-    console.log('ppl', ppl);
     return ppl;
   }
 
@@ -46,13 +41,7 @@ export class FavoriteService {
   }
 
   removeFavorite(person: Person) {
-
-    let arr = this.people;
-
-    arr = arr.filter(x => x.url !== person.url);
-
-    this.people = arr;
-
+    this.people = this.people.filter(x => x.url !== person.url);
   }
 
 }

@@ -18,21 +18,16 @@ export class FavoriteListComponent {
   public people: Person[];
 
   constructor(private favorites: FavoriteService) {
-    this.favorites.favorites$.subscribe(x => {
-      this.people = x;
-    });
   }
 
   eventOptions: SortablejsOptions = {
     onUpdate: () => {
       this.favorites.people = this.people;
-      this.favorites.favorites$.subscribe(x => {
-        this.people = x;
-      });
     }
   };
 
   favorites$ = this.favorites.favorites$.pipe(
+    tap(x => this.people = x),
     catchError(err => {
       this.errorMessage = err;
       return EMPTY;

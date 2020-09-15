@@ -5,11 +5,6 @@ export interface Response<T> {
   next: string;
 }
 
-export interface Paging {
-  page: number;
-  size: number;
-}
-
 export interface Wrapper<T> {
   page: number;
   size: number;

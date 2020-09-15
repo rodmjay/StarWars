@@ -5,7 +5,7 @@ import { Observable, empty, throwError, combineLatest, BehaviorSubject, of } fro
 import { catchError, map, reduce, expand, shareReplay, switchMap, tap, take } from 'rxjs/operators';
 
 import { Person } from './person';
-import { Response, Paging, Wrapper } from '../shared/models';
+import { Response, Wrapper } from '../shared/models';
 import { PlanetService } from '../planets/planet.service';
 import { CachingService } from '../caching/caching.service';
 import { FavoriteService } from '../favorites/favorite.service';
@@ -23,9 +23,6 @@ export class PersonService {
   people$: Observable<Wrapper<Person[]>> =
     combineLatest([this.planetService.planets$, this.listActions$, this.favoriteService.favorites$]).pipe(
       switchMap(([planets, actions, favorites]) => {
-
-        console.log('favorites', favorites);
-
         return this.getPeople(actions.filter).pipe(
           map(people => {
 
@@ -37,18 +34,12 @@ export class PersonService {
                 .find(p => p.url === person.homeworld)
                 .name
             }) as Person);
-            return personList;
-          }),
-          map((response: Person[]) => {
 
-            console.log('actions', actions);
-
-            // custom paging logic
             const wrapper: Wrapper<Person[]> = {
               page: actions.page,
               size: actions.size,
-              pages: Math.floor((response.length + actions.size - 1) / actions.size),
-              results: response.slice((actions.page - 1) * actions.size, actions.page * actions.size),
+              pages: Math.floor((personList.length + actions.size - 1) / actions.size),
+              results: personList.slice((actions.page - 1) * actions.size, actions.page * actions.size),
               totalFavorites: favorites.length
             };
 
@@ -62,7 +53,6 @@ export class PersonService {
   getPeople(filter: string): Observable<Person[]> {
 
     let retVal: Person[];
-
 
     if (filter === '' && this.caching.getItem<Person[]>('people')) {
       retVal = this.caching.getItem<Person[]>('people');
@@ -112,8 +102,7 @@ export class PersonService {
           next: response.next,
           results: response.results as Person[]
         };
-      }),
-      // shareReplay({ bufferSize: 1, refCount: true })
+      })
     );
   }
 

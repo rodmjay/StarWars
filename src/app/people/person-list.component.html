@@ -1,6 +1,8 @@
 <div class="card" *ngIf="people$ | async as people">
   <div class="card-header">
     {{pageTitle}}
+    <a style="float: right" [routerLink]="['/favorites']">{{people.totalFavorites}}</a>
+
   </div>
 
   <div class="card-body">

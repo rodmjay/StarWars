@@ -49,6 +49,7 @@ export class PersonService {
               size: actions.size,
               pages: Math.floor((response.length + actions.size - 1) / actions.size),
               results: response.slice((actions.page - 1) * actions.size, actions.page * actions.size),
+              totalFavorites: favorites.length
             };
 
             return wrapper;

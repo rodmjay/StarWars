@@ -1,6 +1,9 @@
 <div class="card" *ngIf="favorites$ | async as favorites">
 	<div class="card-header">
 		{{pageTitle}}
+
+		<a style="float: right" [routerLink]="['/people']">Back</a>
+
 	</div>
 
 	<div class="card-body">

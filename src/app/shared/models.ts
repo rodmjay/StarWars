@@ -15,4 +15,5 @@ export interface Wrapper<T> {
   size: number;
   pages: number;
   results: T;
+  totalFavorites: number;
 }

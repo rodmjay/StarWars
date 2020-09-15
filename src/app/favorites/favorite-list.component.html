@@ -1,0 +1,34 @@
+<div class="card" *ngIf="favorites$ | async as favorites">
+	<div class="card-header">
+		{{pageTitle}}
+	</div>
+
+	<div class="card-body">
+
+
+		<div class="table-responsive">
+		  <table class="table mb-0">
+			<thead>
+			  <tr>
+				<th>Person</th>
+				<th>Birthday</th>
+				<th>Home World Name</th>
+			  </tr>
+			</thead>
+			<tbody *ngFor="let person of favorites">
+			  <tr>
+				<td>{{ person.name }}</td>
+				<td>{{ person.birth_year }}</td>
+				<td>{{ person.homeworld_name }}</td>
+
+			  </tr>
+			</tbody>
+		  </table>
+		</div>
+
+	  </div>
+
+	<div class="alert alert-danger" *ngIf="errorMessage">
+		{{ errorMessage }}
+	</div>
+</div>

@@ -13,6 +13,11 @@ import { PageNotFoundComponent } from './page-not-found.component';
         loadChildren: () =>
           import('./people/person.module').then(m => m.PersonModule)
       },
+      {
+        path: 'favorites',
+        loadChildren: () =>
+          import('./favorites/favorite.module').then(m => m.FavoritesModule)
+      },
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: '**', component: PageNotFoundComponent }
     ])

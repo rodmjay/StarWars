@@ -3,6 +3,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PersonService } from './person.service';
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { Person } from './person';
+import { FavoriteService } from '../favorites/favorite.service';
 
 @Component({
   templateUrl: './person-list.component.html',
@@ -16,8 +18,6 @@ export class PersonListComponent {
   page = 1;
   size = 5;
 
-  options = [{ value: 5 }, { value: 10 }, { value: 15 }];
-
   people$ = this.personService.people$
     .pipe(
       catchError(err => {
@@ -28,7 +28,6 @@ export class PersonListComponent {
 
 
   refresh() {
-    console.log('actions', [this.page, this.size, this.filter]);
     this.personService.refresh(this.page, this.size, this.filter);
   }
 
@@ -62,6 +61,15 @@ export class PersonListComponent {
     this.refresh();
   }
 
-  constructor(private personService: PersonService) {
+  addFavorite(person: Person) {
+    this.favorites.addFavorite(person);
+  }
+
+  removeFavorite(person: Person){
+    this.favorites.removeFavorite(person);
+  }
+
+  constructor(private personService: PersonService, private favorites: FavoriteService) {
+
   }
 }

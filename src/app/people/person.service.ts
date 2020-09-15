@@ -8,25 +8,31 @@ import { Person } from './person';
 import { Response, Paging, Wrapper } from '../shared/models';
 import { PlanetService } from '../planets/planet.service';
 import { CachingService } from '../caching/caching.service';
+import { FavoriteService } from '../favorites/favorite.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonService {
 
-  private listSubject = new BehaviorSubject<{ page: number, size: number, filter: string }>({ page: 1, size: 5, filter: '' });
+  private listSubject = new BehaviorSubject<{ page: number, size: number, filter: string }>
+    ({ page: 1, size: 5, filter: '' });
 
   listActions$ = this.listSubject.asObservable();
 
   people$: Observable<Wrapper<Person[]>> =
-    combineLatest([this.planetService.planets$, this.listActions$]).pipe(
-      switchMap(([planets, actions]) => {
+    combineLatest([this.planetService.planets$, this.listActions$, this.favoriteService.favorites$]).pipe(
+      switchMap(([planets, actions, favorites]) => {
+
+        console.log('favorites', favorites);
+
         return this.getPeople(actions.filter).pipe(
           map(people => {
 
             // custom mapping logic
             const personList = people.map(person => ({
               ...person,
+              isFavorite: favorites.findIndex(x => x.url === person.url) > -1,
               homeworld_name: planets
                 .find(p => p.url === person.homeworld)
                 .name
@@ -80,7 +86,11 @@ export class PersonService {
   }
 
 
-  constructor(private http: HttpClient, private planetService: PlanetService, private caching: CachingService) {
+  constructor(
+    private http: HttpClient,
+    private planetService: PlanetService,
+    private favoriteService: FavoriteService,
+    private caching: CachingService) {
 
   }
 

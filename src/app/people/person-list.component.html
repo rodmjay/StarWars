@@ -21,6 +21,7 @@
             <th>Person</th>
             <th>Birthday</th>
             <th>Home World Name</th>
+            <th></th>
           </tr>
         </thead>
         <tbody *ngFor="let person of people.results">
@@ -28,6 +29,10 @@
             <td>{{ person.name }}</td>
             <td>{{ person.birth_year }}</td>
             <td>{{ person.homeworld_name }}</td>
+            <td>
+              <button *ngIf="person.isFavorite" class="btn" (click)="removeFavorite(person)">Remove Favorite</button>
+              <button *ngIf="!person.isFavorite" class="btn" (click)="addFavorite(person)">Add Favorite</button>
+            </td>
           </tr>
         </tbody>
       </table>

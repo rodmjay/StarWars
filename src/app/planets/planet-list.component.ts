@@ -1,24 +1,25 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
-import { PersonService } from './person.service';
+import { PlanetService } from './planet.service';
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Person } from './person';
+import { Planet } from './planet';
 import { FavoriteService } from '../favorites/favorite.service';
 
 @Component({
-  templateUrl: './person-list.component.html',
-  styleUrls: ['./person-list.component.css'],
+  templateUrl: './planet-list.component.html',
+  styleUrls: ['./planet-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PersonListComponent {
-  pageTitle = 'Person List';
+export class PlanetListComponent {
+
+  pageTitle = 'Planet List';
   errorMessage = '';
   filter = '';
   page = 1;
   size = 5;
 
-  people$ = this.personService.people$
+  planets$ = this.planetService.planets$
     .pipe(
       catchError(err => {
         this.errorMessage = err;
@@ -28,7 +29,9 @@ export class PersonListComponent {
 
 
   refresh() {
-    this.personService.refresh(this.page, this.size, this.filter);
+    this
+      .planetService
+      .refresh(this.page, this.size, this.filter);
   }
 
 
@@ -61,15 +64,15 @@ export class PersonListComponent {
     this.refresh();
   }
 
-  addFavorite(person: Person) {
-    this.favorites.addFavoritePerson(person);
+  addFavoritePlanet(planet: Planet) {
+    this.favorites.addFavoritePlanet(planet);
   }
 
-  removeFavorite(person: Person) {
-    this.favorites.removeFavoritePerson(person);
+  removeFavoritePlanet(planet: Planet) {
+    this.favorites.removeFavoritePlanet(planet);
   }
 
-  constructor(private personService: PersonService, private favorites: FavoriteService) {
+  constructor(private planetService: PlanetService, private favorites: FavoriteService) {
 
   }
 }

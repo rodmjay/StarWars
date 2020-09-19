@@ -21,7 +21,7 @@ export class PersonService {
   listActions$ = this.listSubject.asObservable();
 
   people$: Observable<Wrapper<Person[]>> =
-    combineLatest([this.planetService.planets$, this.listActions$, this.favoriteService.favorites$]).pipe(
+    combineLatest([this.planetService.allPlanets$, this.listActions$, this.favoriteService.favoritePeople$]).pipe(
       switchMap(([planets, actions, favorites]) => {
         return this.getPeople(actions.filter).pipe(
           map(people => {
@@ -30,8 +30,7 @@ export class PersonService {
             const personList = people.map(person => ({
               ...person,
               isFavorite: favorites.findIndex(x => x.url === person.url) > -1,
-              homeworld_name: planets
-                .find(p => p.url === person.homeworld)
+              homeworld_name: planets.find(p => p.url === person.homeworld)
                 .name
             }) as Person);
 
@@ -50,7 +49,7 @@ export class PersonService {
       catchError(this.handleError)
     );
 
-  getPeople(filter: string): Observable<Person[]> {
+  private getPeople(filter: string): Observable<Person[]> {
 
     let retVal: Person[];
 

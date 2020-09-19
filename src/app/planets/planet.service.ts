@@ -1,18 +1,52 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, empty, throwError } from 'rxjs';
-import { catchError, map, reduce, expand, shareReplay } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject, of, combineLatest, empty, EMPTY } from 'rxjs';
+import { catchError, map, reduce, expand, shareReplay, switchMap } from 'rxjs/operators';
 
 import { Planet } from './planet';
-import { Response } from '../shared/models';
+import { Response, Wrapper } from '../shared/models';
+import { CachingService } from '../caching/caching.service';
+import { FavoriteService } from '../favorites/favorite.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlanetService {
 
-  planets$: Observable<Planet[]> = this.getPage('http://swapi.dev/api/planets/?format=json')
+  private listSubject = new BehaviorSubject<{ page: number, size: number, filter: string }>
+    ({ page: 1, size: 5, filter: '' });
+  listActions$ = this.listSubject.asObservable();
+
+
+  planets$: Observable<Wrapper<Planet[]>> =
+  combineLatest([this.listActions$, this.favoriteService.favoritePlanets$]).pipe(
+    switchMap(([actions, favorites]) => {
+      return this.getPlanets(actions.filter).pipe(
+        map(people => {
+
+          // custom mapping logic
+          const personList = people.map(planet => ({
+            ...planet,
+            isFavorite: favorites.findIndex(x => x.url === planet.url) > -1
+          }) as Planet);
+
+          const wrapper: Wrapper<Planet[]> = {
+            page: actions.page,
+            size: actions.size,
+            pages: Math.floor((personList.length + actions.size - 1) / actions.size),
+            results: personList.slice((actions.page - 1) * actions.size, actions.page * actions.size),
+            totalFavorites: favorites.length
+          };
+
+          return wrapper;
+        })
+      );
+    }),
+    catchError(this.handleError)
+  );
+
+  allPlanets$: Observable<Planet[]> = this.getPage('http://swapi.dev/api/planets/?format=json')
     .pipe(
       expand(data => {
         return data.next ? this.getPage(data.next) : empty();
@@ -20,7 +54,6 @@ export class PlanetService {
       reduce((acc, data) => {
         return acc.concat(data.results);
       }, []),
-      // shareReplay({ bufferSize: 1, refCount: true }),
       catchError(this.handleError)
     );
 
@@ -35,8 +68,44 @@ export class PlanetService {
     );
   }
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private caching: CachingService, private favoriteService: FavoriteService) {
 
+  }
+
+  private getUrlWithSearch(filter: string): string {
+    return !!filter
+      ? `http://swapi.dev/api/planets/?format=json&search=${filter}`
+      : 'http://swapi.dev/api/planets/?format=json';
+  }
+
+  private getPlanets(filter: string): Observable<Planet[]> {
+
+    let retVal: Planet[];
+
+    if (filter === '' && this.caching.getItem<Planet[]>('planets')) {
+      retVal = this.caching.getItem<Planet[]>('planets');
+      return of(retVal);
+    }
+
+    return this.getPage(this.getUrlWithSearch(filter)).pipe(
+      expand(data => {
+        return data.next ? this.getPage(data.next) : EMPTY;
+      }),
+      reduce((acc, data) => {
+
+        retVal = acc.concat(data.results);
+
+        if (filter === '') {
+          this.caching.setItem<Planet[]>('planets', retVal);
+        }
+
+        return retVal;
+      }, [])
+    );
+  }
+
+  refresh(page: number = 1, size: number = 5, filter: string = ''): void {
+    this.listSubject.next({ page, size, filter });
   }
 
   private handleError(err: any) {

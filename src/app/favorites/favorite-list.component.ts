@@ -3,8 +3,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { FavoriteService } from '../favorites/favorite.service';
-import { SortablejsOptions } from 'ngx-sortablejs';
+import { Options } from 'sortablejs';
 import { Person } from '../people/person';
+import { Planet } from '../planets/planet';
 
 @Component({
   templateUrl: './favorite-list.component.html',
@@ -12,22 +13,38 @@ import { Person } from '../people/person';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FavoriteListComponent {
-  pageTitle = 'Favorite People';
+
+  pageTitle = 'Favorites';
   errorMessage = '';
 
   public people: Person[];
+  public planets: Planet[];
 
   constructor(private favorites: FavoriteService) {
   }
 
-  eventOptions: SortablejsOptions = {
+  favoritePeopleOptions: Options = {
     onUpdate: () => {
       this.favorites.people = this.people;
     }
   };
 
-  favorites$ = this.favorites.favorites$.pipe(
-    tap(x => this.people = x),
+  favoritePlanetsOptions: Options = {
+    onUpdate: () => {
+      this.favorites.planets = this.planets;
+    }
+  };
+
+  favoritePlanets$ = this.favorites.favoritePlanets$.pipe(
+    tap(faves => this.planets = faves),
+    catchError(err => {
+      this.errorMessage = err;
+      return EMPTY;
+    })
+  );
+
+  favoritePeople$ = this.favorites.favoritePeople$.pipe(
+    tap(faves => this.people = faves),
     catchError(err => {
       this.errorMessage = err;
       return EMPTY;

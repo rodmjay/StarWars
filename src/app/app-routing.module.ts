@@ -14,6 +14,11 @@ import { PageNotFoundComponent } from './page-not-found.component';
           import('./people/person.module').then(m => m.PersonModule)
       },
       {
+        path: 'planets',
+        loadChildren: () =>
+          import('./planets/planet.module').then(m => m.PlanetModule)
+      },
+      {
         path: 'favorites',
         loadChildren: () =>
           import('./favorites/favorite.module').then(m => m.FavoritesModule)

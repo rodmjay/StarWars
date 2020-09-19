@@ -1,24 +1,21 @@
-<div class="card" *ngIf="favorites$ | async as faves">
-	<div class="card-header">
-		{{pageTitle}}
-
-		<a style="float: right" [routerLink]="['/people']">Back</a>
+<div class="card" *ngIf="favoritePeople$ | async as favoritePeople">
+	<div *ngIf="favoritePlanets$ | async as favoritePlanets">
 
 	</div>
+	<div class="card-header">
+		{{pageTitle}}
+		<a style="float: right" [routerLink]="['/people']">Back</a>
+	</div>
 
-	<div class="card-body" [sortablejs]="people" [sortablejsOptions]="eventOptions">
-
-
-		<div class="draggable"
-			style="margin: 10px; padding: 10px; border-color: black"
-			*ngFor="let person of people; let idx = index">
-			 {{idx+1}} {{ person.name }}
+	<div class="card-body" [sortablejs]="people" [sortablejsOptions]="favoritePeopleOptions">
+		<div class="draggable" style="margin: 10px; padding: 10px; border-color: black"
+			*ngFor="let person of favoritePeople; let idx = index">
+			{{idx+1}} {{ person.name }}
 		</div>
-
-
-	  </div>
+	</div>
 
 	<div class="alert alert-danger" *ngIf="errorMessage">
 		{{ errorMessage }}
 	</div>
+
 </div>

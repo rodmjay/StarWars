@@ -1,10 +1,10 @@
-<div class="card" *ngIf="people$ | async as people">
+<div class="card" *ngIf="planets$ | async as planets">
   <div class="card-header">
 
     {{ pageTitle }}
 
     <a style="float: right" [routerLink]="['/favorites']">
-      {{people.totalFavorites}}
+      {{planets.totalFavorites}}
     </a>
 
   </div>
@@ -24,36 +24,27 @@
       <table class="table mb-0">
         <thead>
           <tr>
-            <th>Person</th>
-            <th>Birthday</th>
-            <th>Home World Name</th>
-            <th></th>
+            <th>Planet</th>
           </tr>
         </thead>
-        <tbody *ngFor="let person of people.results">
+        <tbody *ngFor="let planet of planets.results">
           <tr>
-            <td>{{ person.name }}</td>
-            <td>{{ person.birth_year }}</td>
-            <td>{{ person.homeworld_name }}</td>
-            <td>
-              <button *ngIf="person.isFavorite" class="btn" (click)="removeFavorite(person)">Remove Favorite</button>
-              <button *ngIf="!person.isFavorite" class="btn" (click)="addFavorite(person)">Add Favorite</button>
-            </td>
+            <td>{{ planet.name }}</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <nav *ngIf="people.pages > 1" style="margin-top: 20px;">
+    <nav *ngIf="planets.pages > 1" style="margin-top: 20px;">
       <ul class="pagination">
-        <li *ngIf="people.page > 1" class="page-item">
+        <li *ngIf="planets.page > 1" class="page-item">
           <a class="page-link" (click)="prev()">Previous</a>
         </li>
-        <li [ngClass]="{'page-item' : true, 'active': i + 1 == page}" *ngFor="let item of [].constructor(people.pages); let i = index">
+        <li [ngClass]="{'page-item' : true, 'active': i + 1 == page}" *ngFor="let item of [].constructor(planets.pages); let i = index">
           <a class="page-link" (click)="setPage(i+1)">
             {{ i + 1 }}
           </a>
         </li>
-        <li *ngIf="people.pages > people.page" class="page-item"><a class="page-link" (click)="next()">Next</a></li>
+        <li *ngIf="planets.pages > planets.page" class="page-item"><a class="page-link" (click)="next()">Next</a></li>
       </ul>
     </nav>
   </div>

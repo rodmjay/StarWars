@@ -64,11 +64,11 @@ export class PlanetListComponent {
     this.refresh();
   }
 
-  addFavoritePlanet(planet: Planet) {
+  addFavorite(planet: Planet) {
     this.favorites.addFavoritePlanet(planet);
   }
 
-  removeFavoritePlanet(planet: Planet) {
+  removeFavorite(planet: Planet) {
     this.favorites.removeFavoritePlanet(planet);
   }
 

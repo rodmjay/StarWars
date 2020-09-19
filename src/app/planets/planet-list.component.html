@@ -25,12 +25,18 @@
         <thead>
           <tr>
             <th>Planet</th>
+            <th></th>
           </tr>
         </thead>
         <tbody *ngFor="let planet of planets.results">
           <tr>
             <td>{{ planet.name }}</td>
+            <td>
+              <button *ngIf="planet.isFavorite" class="btn" (click)="removeFavorite(planet)">Remove Favorite</button>
+              <button *ngIf="!planet.isFavorite" class="btn" (click)="addFavorite(planet)">Add Favorite</button>
+            </td>
           </tr>
+
         </tbody>
       </table>
     </div>

@@ -9,10 +9,18 @@
 
 	<div class="card-body" [sortablejs]="people" [sortablejsOptions]="favoritePeopleOptions">
 		<div class="draggable" style="margin: 10px; padding: 10px; border-color: black"
-			*ngFor="let person of favoritePeople; let idx = index">
+			*ngFor="let person of people; let idx = index">
 			{{idx+1}} {{ person.name }}
 		</div>
 	</div>
+
+	<div class="card-body" [sortablejs]="planets" [sortablejsOptions]="favoritePlanetsOptions">
+		<div class="draggable" style="margin: 10px; padding: 10px; border-color: black"
+			*ngFor="let planet of planets; let idx = index">
+			{{idx+1}} {{ planet.name }}
+		</div>
+	</div>
+
 
 	<div class="alert alert-danger" *ngIf="errorMessage">
 		{{ errorMessage }}

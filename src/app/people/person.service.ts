@@ -1,29 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, empty, throwError, combineLatest, BehaviorSubject, of } from 'rxjs';
-import { catchError, map, reduce, expand, shareReplay, switchMap, tap, take } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 import { Person } from './person';
-import { Response, Wrapper } from '../shared/models';
+import { Wrapper } from '../shared/models';
 import { PlanetService } from '../planets/planet.service';
 import { CachingService } from '../caching/caching.service';
 import { FavoriteService } from '../favorites/favorite.service';
+import { BaseService } from '../shared/base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PersonService {
-
-  private listSubject = new BehaviorSubject<{ page: number, size: number, filter: string }>
-    ({ page: 1, size: 5, filter: '' });
-
-  listActions$ = this.listSubject.asObservable();
+export class PersonService extends BaseService<Person> {
 
   people$: Observable<Wrapper<Person[]>> =
-    combineLatest([this.planetService.allPlanets$, this.listActions$, this.favoriteService.favoritePeople$]).pipe(
+    combineLatest([this.planetService.allItems$, this.listActions$, this.favoriteService.favoritePeople$]).pipe(
       switchMap(([planets, actions, favorites]) => {
-        return this.getPeople(actions.filter).pipe(
+        return this.getItems(actions.filter).pipe(
           map(people => {
 
             // custom mapping logic
@@ -34,90 +30,18 @@ export class PersonService {
                 .name
             }) as Person);
 
-            const wrapper: Wrapper<Person[]> = {
-              page: actions.page,
-              size: actions.size,
-              pages: Math.floor((personList.length + actions.size - 1) / actions.size),
-              results: personList.slice((actions.page - 1) * actions.size, actions.page * actions.size),
-              totalFavorites: favorites.length
-            };
-
-            return wrapper;
+            return this.getWrapper(actions.page, actions.size, favorites.length, personList);
           })
         );
       }),
       catchError(this.handleError)
     );
 
-  private getPeople(filter: string): Observable<Person[]> {
-
-    let retVal: Person[];
-
-    if (filter === '' && this.caching.getItem<Person[]>('people')) {
-      retVal = this.caching.getItem<Person[]>('people');
-      return of(retVal);
-    }
-
-    return this.getPage(this.getUrlWithSearch(filter)).pipe(
-      expand(data => {
-        return data.next ? this.getPage(data.next) : empty();
-      }),
-      reduce((acc, data) => {
-
-        retVal = acc.concat(data.results);
-
-        if (filter === '') {
-          this.caching.setItem<Person[]>('people', retVal);
-        }
-
-        return retVal;
-      }, [])
-    );
-  }
-
-
   constructor(
-    private http: HttpClient,
+    http: HttpClient,
     private planetService: PlanetService,
-    private favoriteService: FavoriteService,
-    private caching: CachingService) {
-
-  }
-
-  refresh(page: number = 1, size: number = 5, filter: string = ''): void {
-    this.listSubject.next({ page, size, filter });
-  }
-
-  private getUrlWithSearch(filter: string): string {
-    return !!filter
-      ? `http://swapi.dev/api/people/?format=json&search=${filter}`
-      : 'http://swapi.dev/api/people/?format=json';
-  }
-
-  private getPage(url: string): Observable<{ next: string, results: Person[] }> {
-    return this.http.get<Response<Person[]>>(url).pipe(
-      map(response => {
-        return {
-          next: response.next,
-          results: response.results as Person[]
-        };
-      })
-    );
-  }
-
-  private handleError(err: any) {
-    // in a real world app, we may send the server to some remote logging infrastructure
-    // instead of just logging it to the console
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
-    }
-    console.error(err);
-    return throwError(errorMessage);
+    favoriteService: FavoriteService,
+    caching: CachingService) {
+    super(http, caching, favoriteService, 'people');
   }
 }

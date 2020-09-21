@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CachingService } from '../caching/caching.service';
 import { BehaviorSubject } from 'rxjs';
-import { Person } from '../people/person';
-import { Planet } from '../planets/planet';
-import { Starship } from '../starships/starship';
+import { CachingService } from 'src/app/shared/caching/caching.service';
+import { Person, Planet, Starship } from '../shared/models';
 
 @Injectable({
   providedIn: 'root'

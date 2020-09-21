@@ -3,13 +3,11 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable, combineLatest } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-
-import { Person } from './person';
-import { Wrapper } from '../shared/models';
+import { CachingService } from 'src/app/shared/caching/caching.service';
+import { FavoriteService } from 'src/app/favorites/favorite.service';
+import { BaseService } from 'src/app/shared/base.service';
+import { Person, Wrapper } from 'src/app/shared/models';
 import { PlanetService } from '../planets/planet.service';
-import { CachingService } from '../caching/caching.service';
-import { FavoriteService } from '../favorites/favorite.service';
-import { BaseService } from '../shared/base.service';
 
 @Injectable({
   providedIn: 'root'

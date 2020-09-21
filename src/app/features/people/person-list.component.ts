@@ -3,8 +3,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PersonService } from './person.service';
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Person } from './person';
-import { FavoriteService } from '../favorites/favorite.service';
+import { FavoriteService } from '../../favorites/favorite.service';
+import { Person } from 'src/app/shared/models';
+
 
 @Component({
   templateUrl: './person-list.component.html',
@@ -48,16 +49,6 @@ export class PersonListComponent {
 
   setPage(page: number) {
     this.page = page;
-    this.refresh();
-  }
-
-  next() {
-    this.page++;
-    this.refresh();
-  }
-
-  prev() {
-    this.page--;
     this.refresh();
   }
 

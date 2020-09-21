@@ -4,8 +4,7 @@ import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { FavoriteService } from '../favorites/favorite.service';
 import { Options } from 'sortablejs';
-import { Person } from '../people/person';
-import { Planet } from '../planets/planet';
+import { Person, Planet } from '../shared/models';
 
 @Component({
   templateUrl: './favorite-list.component.html',

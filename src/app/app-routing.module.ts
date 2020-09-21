@@ -11,17 +11,17 @@ import { PageNotFoundComponent } from './page-not-found.component';
       {
         path: 'people',
         loadChildren: () =>
-          import('./people/person.module').then(m => m.PersonModule)
+          import('./features/people/person.module').then(m => m.PersonModule)
       },
       {
         path: 'planets',
         loadChildren: () =>
-          import('./planets/planet.module').then(m => m.PlanetModule)
+          import('./features/planets/planet.module').then(m => m.PlanetModule)
       },
       {
         path: 'starships',
         loadChildren: () =>
-          import('./starships/starship.module').then(m => m.StarshipModule)
+          import('./features/starships/starship.module').then(m => m.StarshipModule)
       },
       {
         path: 'favorites',

@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input, Output } from '@angular/core';
-import { EventEmitter } from 'protractor';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'pm-pagination',
-  templateUrl: './pagniation.component.html',
+  templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -11,10 +11,26 @@ export class PaginationComponent {
 
   @Input() page: number;
   @Input() size: number;
-  @Output() pageChanged = new EventEmitter();
+  @Input() totalPages: number;
+
+  @Output() pageChanged = new EventEmitter<number>();
 
   handlePaging() {
-    this.pageChanged.emit(this.page.toString());
+    this.pageChanged.emit(this.page);
   }
 
+  setPage(value: number) {
+    this.page = value;
+    this.handlePaging();
+  }
+
+  prev(): void {
+    this.page--;
+    this.handlePaging();
+  }
+
+  next(): void {
+    this.page++;
+    this.handlePaging();
+  }
 }

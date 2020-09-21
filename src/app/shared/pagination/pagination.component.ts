@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, Output } from '@angular/core
 import { EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'pm-pagination',
+  selector: 'sw-pagination',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

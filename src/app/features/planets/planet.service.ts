@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
-import { Planet, Wrapper } from '../../shared/models';
+import { Planet } from '../../shared/models';
 import { CachingService } from 'src/app/shared/caching/caching.service';
 import { FavoriteService } from '../../favorites/favorite.service';
 import { BaseService } from '../../shared/base.service';

@@ -40,19 +40,10 @@
         </tbody>
       </table>
     </div>
-    <nav *ngIf="planets.pages > 1" style="margin-top: 20px;">
-      <ul class="pagination">
-        <li *ngIf="planets.page > 1" class="page-item">
-          <a class="page-link" (click)="prev()">Previous</a>
-        </li>
-        <li [ngClass]="{'page-item' : true, 'active': i + 1 == page}" *ngFor="let item of [].constructor(planets.pages); let i = index">
-          <a class="page-link" (click)="setPage(i+1)">
-            {{ i + 1 }}
-          </a>
-        </li>
-        <li *ngIf="planets.pages > planets.page" class="page-item"><a class="page-link" (click)="next()">Next</a></li>
-      </ul>
-    </nav>
+
+
+    <pm-pagination [page]="page" [totalPages]="planets.pages" (pageChanged)="setPage($event)"></pm-pagination>
+
   </div>
 </div>
 

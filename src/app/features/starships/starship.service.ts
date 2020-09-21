@@ -1,20 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { CachingService } from 'src/app/shared/caching/caching.service';
 import { FavoriteService } from '../../favorites/favorite.service';
 import { BaseService } from '../../shared/base.service';
-import { Starship, Wrapper } from '../../shared/models';
-
+import { Starship } from '../../shared/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StarshipService extends BaseService<Starship> {
 
-  starships$: Observable<Wrapper<Starship[]>> =
-    combineLatest([this.listActions$, this.favoriteService.favoriteStarships$]).pipe(
+  starships$ = combineLatest([this.listActions$, this.favoriteService.favoriteStarships$])
+    .pipe(
       switchMap(([actions, favorites]) => {
         return this.getItems(actions.filter).pipe(
           map(starships => {

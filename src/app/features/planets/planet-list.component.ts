@@ -54,16 +54,6 @@ export class PlanetListComponent {
     this.refresh();
   }
 
-  next() {
-    this.page++;
-    this.refresh();
-  }
-
-  prev() {
-    this.page--;
-    this.refresh();
-  }
-
   addFavorite(planet: Planet) {
     this.favorites.addFavoritePlanet(planet);
   }

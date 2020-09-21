@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Starship } from 'src/app/shared/models';
-import { FavoriteService } from '../../favorites/favorite.service';
+import { FavoriteService } from '../favorites/favorite.service';
 import { StarshipService } from './starship.service';
 
 @Component({

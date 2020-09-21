@@ -26,7 +26,7 @@ import { PageNotFoundComponent } from './page-not-found.component';
       {
         path: 'favorites',
         loadChildren: () =>
-          import('./favorites/favorite.module').then(m => m.FavoritesModule)
+          import('./features/favorites/favorite.module').then(m => m.FavoritesModule)
       },
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: '**', component: PageNotFoundComponent }

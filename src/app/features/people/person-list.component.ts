@@ -3,8 +3,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PersonService } from './person.service';
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { FavoriteService } from '../../favorites/favorite.service';
 import { Person } from 'src/app/shared/models';
+import { FavoriteService } from '../favorites/favorite.service';
 
 
 @Component({

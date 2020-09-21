@@ -6,8 +6,8 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 
 import { Planet } from '../../shared/models';
 import { CachingService } from 'src/app/shared/caching/caching.service';
-import { FavoriteService } from '../../favorites/favorite.service';
 import { BaseService } from '../../shared/base.service';
+import { FavoriteService } from '../favorites/favorite.service';
 
 @Injectable({
   providedIn: 'root'

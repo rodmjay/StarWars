@@ -1,10 +1,10 @@
-<div class="card" *ngIf="people$ | async as people">
+<div class="card" *ngIf="vm$ | async as vm">
   <div class="card-header">
 
     {{ pageTitle }}
 
     <a style="float: right" [routerLink]="['/favorites']">
-      {{people.totalFavorites}}
+      {{ vm.people.totalFavorites }}
     </a>
 
   </div>
@@ -12,6 +12,7 @@
   <div class="card-body">
 
     <div class="input-group">
+
       <input [(ngModel)]='filter' type="text" class="form-control" placeholder="Person Name">
 
       <div class="input-group-append">
@@ -30,7 +31,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody *ngFor="let person of people.results">
+        <tbody *ngFor="let person of vm.people.results">
           <tr>
             <td>{{ person.name }}</td>
             <td>{{ person.birth_year }}</td>
@@ -44,7 +45,7 @@
       </table>
     </div>
 
-    <sw-pagination [page]="page" [totalPages]="people.pages" (pageChanged)="setPage($event)"></sw-pagination>
+    <sw-pagination [page]="page" [totalPages]="vm.people.pages" (pageChanged)="setPage($event)"></sw-pagination>
 
   </div>
 </div>

@@ -8,7 +8,6 @@ import { WelcomeComponent } from './home/welcome.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 
 import { SortablejsModule } from 'ngx-sortablejs';
-import { PaginationComponent } from './shared/pagination/pagination.component';
 import { CoreModule } from './core/core.module';
 
 @NgModule({

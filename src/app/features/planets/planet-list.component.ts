@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
-import { EMPTY } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { combineLatest, EMPTY } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Planet } from 'src/app/shared/models';
 import { FavoriteService } from 'src/app/core/favorite.service';
 import { PlanetService } from 'src/app/core/planet.service';
@@ -19,8 +19,11 @@ export class PlanetListComponent {
   page = 1;
   size = 5;
 
-  planets$ = this.planetService.planets$
+  vm$ = combineLatest([this.planetService.planets$])
     .pipe(
+      map(([planets]) => ({
+        planets
+      })),
       catchError(err => {
         this.errorMessage = err;
         return EMPTY;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, Subject } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { CachingService } from 'src/app/shared/caching/caching.service';
 import { FavoriteService } from 'src/app/core/favorite.service';
@@ -11,6 +11,10 @@ import { PlanetService } from './planet.service';
 
 @Injectable()
 export class PersonService extends BaseService<Person> {
+
+
+  private personSelectedAction = new Subject<string>();
+  personSelectedAction$ = this.personSelectedAction.asObservable();
 
   people$ = combineLatest([
     this.planetService.allItems$,
@@ -35,6 +39,15 @@ export class PersonService extends BaseService<Person> {
       catchError(this.handleError)
     );
 
+  selectedPerson$ = combineLatest([this.personSelectedAction$, this.people$]).pipe(
+    map(([personId, people]) => people.results.find(person => person.url === personId)),
+    catchError(this.handleError)
+  );
+
+  changeSelectedPerson(personId: string): void {
+    this.personSelectedAction.next(personId);
+  }
+
   constructor(
     http: HttpClient,
     private planetService: PlanetService,
@@ -42,4 +55,5 @@ export class PersonService extends BaseService<Person> {
     caching: CachingService) {
     super(http, caching, favoriteService, 'people');
   }
+
 }

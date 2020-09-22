@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
-import { EMPTY } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { combineLatest, EMPTY } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Starship } from 'src/app/shared/models';
 import { FavoriteService } from '../../core/favorite.service';
 import { StarshipService } from '../../core/starship.service';
@@ -19,13 +19,17 @@ export class StarshipListComponent {
   page = 1;
   size = 5;
 
-  starships$ = this.starshipService.starships$
+  vm$ = combineLatest([this.starshipService.starships$])
     .pipe(
+      map(([starships]) => ({
+        starships
+      })),
       catchError(err => {
         this.errorMessage = err;
         return EMPTY;
       })
     );
+
 
   addFavorite(starship: Starship) {
     this.favorites.addFavoriteStarship(starship);

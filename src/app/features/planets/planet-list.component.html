@@ -1,10 +1,10 @@
-<div class="card" *ngIf="planets$ | async as planets">
+<div class="card" *ngIf="vm$ | async as vm">
   <div class="card-header">
 
     {{ pageTitle }}
 
     <a style="float: right" [routerLink]="['/favorites']">
-      {{planets.totalFavorites}}
+      {{vm.planets.totalFavorites}}
     </a>
 
   </div>
@@ -12,7 +12,7 @@
   <div class="card-body">
 
     <div class="input-group">
-      <input [(ngModel)]='filter' type="text" class="form-control" placeholder="Person Name">
+      <input [(ngModel)]='filter' type="text" class="form-control" placeholder="Planet Name">
 
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" (click)="search(filter.value)">Search</button>
@@ -28,7 +28,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody *ngFor="let planet of planets.results">
+        <tbody *ngFor="let planet of vm.planets.results">
           <tr>
             <td>{{ planet.name }}</td>
             <td>
@@ -42,7 +42,7 @@
     </div>
 
 
-    <sw-pagination [page]="page" [totalPages]="planets.pages" (pageChanged)="setPage($event)"></sw-pagination>
+    <sw-pagination [page]="page" [totalPages]="vm.planets.pages" (pageChanged)="setPage($event)"></sw-pagination>
 
   </div>
 </div>

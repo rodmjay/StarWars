@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, empty, Observable, of, throwError } from 'rxjs';
 import { catchError, expand, map, reduce } from 'rxjs/operators';
 import { CachingService } from 'src/app/shared/caching/caching.service';
-import { FavoriteService } from '../features/favorites/favorite.service';
+import { FavoriteService } from '../core/favorite.service';
 import { Response, Wrapper } from '../shared/models';
 import { environment } from './../../environments/environment';
 

@@ -4,14 +4,12 @@ import { HttpClient } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
-import { Planet } from '../../shared/models';
+import { Planet } from '../shared/models';
 import { CachingService } from 'src/app/shared/caching/caching.service';
-import { BaseService } from '../../shared/base.service';
-import { FavoriteService } from '../favorites/favorite.service';
+import { BaseService } from '../shared/base.service';
+import { FavoriteService } from './favorite.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PlanetService extends BaseService<Planet> {
 
   planets$ = combineLatest([this.listActions$, this.favoriteService.favoritePlanets$])

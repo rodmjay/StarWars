@@ -4,6 +4,7 @@ import { FavoriteService } from './favorite.service';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { PersonService } from './person.service';
 import { PlanetService } from './planet.service';
+import { SettingService } from './settings.services';
 import { StarshipService } from './starship.service';
 
 @NgModule({
@@ -14,7 +15,8 @@ import { StarshipService } from './starship.service';
     FavoriteService,
     PersonService,
     PlanetService,
-    StarshipService
+    StarshipService,
+    SettingService
   ]
 })
 export class CoreModule {

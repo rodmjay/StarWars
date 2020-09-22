@@ -19,6 +19,11 @@ import { PageNotFoundComponent } from './page-not-found.component';
           import('./features/planets/planet.module').then(m => m.PlanetModule)
       },
       {
+        path: 'settings',
+        loadChildren: () =>
+          import('./features/settings/settings.module').then(m => m.SettingsModule)
+      },
+      {
         path: 'starships',
         loadChildren: () =>
           import('./features/starships/starship.module').then(m => m.StarshipModule)

@@ -32,3 +32,6 @@ export interface Planet {
   url: string;
 }
 
+export interface Settings {
+  pageSize: number;
+}

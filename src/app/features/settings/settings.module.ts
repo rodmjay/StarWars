@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { PlanetListComponent } from './planet-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { SettingsComponent } from './settings.component';
 
 @NgModule({
   imports: [
@@ -10,12 +10,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
     RouterModule.forChild([
       {
         path: '',
-        component: PlanetListComponent
+        component: SettingsComponent
       },
     ])
   ],
   declarations: [
-    PlanetListComponent
+    SettingsComponent
   ]
 })
-export class PlanetModule { }
+export class SettingsModule { }

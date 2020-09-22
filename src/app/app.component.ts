@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'pm-root',
+  selector: 'sw-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

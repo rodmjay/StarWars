@@ -22,16 +22,12 @@ export class FavoriteService {
   }
 
   set people(value: Person[]) {
-    this.favoritesPersonSubject.next(value);
     this.caching.setItem<Person[]>(this.favoritePeopleKey, value);
+    this.favoritesPersonSubject.next(value);
   }
 
   get people(): Person[] {
-    let ppl = this.caching.getItem<Person[]>(this.favoritePeopleKey);
-    if (ppl === null) {
-      ppl = [];
-    }
-    return ppl;
+    return this.caching.getItem<Person[]>(this.favoritePeopleKey) || [];
   }
 
   set planets(value: Planet[]) {
@@ -40,11 +36,7 @@ export class FavoriteService {
   }
 
   get planets(): Planet[] {
-    let ppl = this.caching.getItem<Planet[]>(this.favoritePlanetsKey);
-    if (ppl === null) {
-      ppl = [];
-    }
-    return ppl;
+    return this.caching.getItem<Planet[]>(this.favoritePlanetsKey) || [];
   }
 
   set starships(value: Starship[]) {
@@ -53,11 +45,7 @@ export class FavoriteService {
   }
 
   get starships(): Starship[] {
-    let starships = this.caching.getItem<Starship[]>(this.favoriteStarshipsKey);
-    if (starships === null) {
-      starships = [];
-    }
-    return starships;
+    return this.caching.getItem<Starship[]>(this.favoriteStarshipsKey) || [];
   }
 
   addFavoritePerson(person: Person) {

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PersonService } from 'src/app/core/services/person.service';
 import { combineLatest, EMPTY } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, shareReplay } from 'rxjs/operators';
 import { Person } from 'src/app/core/models';
 import { FavoriteService } from 'src/app/core/services/favorite.service';
 import { environment as env } from 'src/environments/environment';
@@ -20,6 +20,7 @@ export class PersonListComponent {
   size = env.pageSize;
 
   vm$ = combineLatest([this.personService.people$]).pipe(
+    shareReplay(),
     map(([people]) => ({ people })),
     catchError(err => {
       this.errorMessage = err;

@@ -4,7 +4,7 @@ import { catchError, expand, map, reduce } from 'rxjs/operators';
 import { CachingService } from 'src/app/core/services/caching.service';
 import { FavoriteService } from '../services/favorite.service';
 import { Response, Wrapper } from '../models';
-import { environment } from 'src/environments/environment';
+import { environment as env } from 'src/environments/environment';
 
 export class BaseService<T> {
 
@@ -12,7 +12,7 @@ export class BaseService<T> {
     protected http: HttpClient, protected caching: CachingService, protected favoriteService: FavoriteService, private key: string) {
   }
   protected listSubject = new BehaviorSubject<{ page: number, size: number, filter: string }>
-    ({ page: 1, size: 5, filter: '' });
+    ({ page: 1, size: env.pageSize, filter: '' });
 
   listActions$ = this.listSubject.asObservable();
 
@@ -31,8 +31,8 @@ export class BaseService<T> {
 
   protected getUrlWithSearch(filter: string = ''): string {
     return !!filter
-      ? `${environment.apiUrl}/api/${this.key}/?format=json&search=${filter}`
-      : `${environment.apiUrl}/api/${this.key}/?format=json`;
+      ? `${env.apiUrl}/api/${this.key}/?format=json&search=${filter}`
+      : `${env.apiUrl}/api/${this.key}/?format=json`;
   }
 
 

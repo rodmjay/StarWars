@@ -33,7 +33,9 @@
         </thead>
         <tbody *ngFor="let person of vm.people.results">
           <tr>
-            <td>{{ person.name }}</td>
+            <td>
+              <a [routerLink]="[person.id]"> {{ person.name }}</a>
+             </td>
             <td>{{ person.birth_year }}</td>
             <td>{{ person.homeworld_name }}</td>
             <td>

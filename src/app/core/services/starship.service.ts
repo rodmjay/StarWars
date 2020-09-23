@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { CachingService } from 'src/app/shared/caching/caching.service';
-import { BaseService } from '../shared/base.service';
-import { Starship } from '../shared/models';
-import { FavoriteService } from 'src/app/core/favorite.service';
+import { BaseService } from '../../shared/base.service';
+import { Starship } from '../../shared/models';
+import { FavoriteService } from 'src/app/core/services/favorite.service';
 
 @Injectable()
 export class StarshipService extends BaseService<Starship> {

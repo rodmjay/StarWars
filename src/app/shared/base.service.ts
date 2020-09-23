@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, empty, Observable, of, throwError } from 'rxjs';
 import { catchError, expand, map, reduce } from 'rxjs/operators';
 import { CachingService } from 'src/app/shared/caching/caching.service';
-import { FavoriteService } from '../core/favorite.service';
+import { FavoriteService } from '../core/services/favorite.service';
 import { Response, Wrapper } from '../shared/models';
 import { environment } from './../../environments/environment';
 
@@ -97,6 +97,7 @@ export class BaseService<T> {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
+      console.log('error code', err);
       errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
     }
     console.error(err);

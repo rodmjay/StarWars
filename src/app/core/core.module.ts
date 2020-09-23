@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
-import { FavoriteService } from './favorite.service';
-import { throwIfAlreadyLoaded } from './module-import-guard';
-import { PersonService } from './person.service';
-import { PlanetService } from './planet.service';
-import { SettingService } from './settings.services';
-import { StarshipService } from './starship.service';
+import { AuthGuard } from './guards/auth.guard';
+import { AuthService } from './services/auth.service';
+import { FavoriteService } from './services/favorite.service';
+import { throwIfAlreadyLoaded } from './guards/module-import-guard';
+import { PersonService } from './services/person.service';
+import { PlanetService } from './services/planet.service';
+import { SettingService } from './services/settings.services';
+import { StarshipService } from './services/starship.service';
+import { PersonResolver } from './resolvers/person-resolver.service';
 
 @NgModule({
   imports: [
@@ -16,7 +19,10 @@ import { StarshipService } from './starship.service';
     PersonService,
     PlanetService,
     StarshipService,
-    SettingService
+    SettingService,
+    AuthService,
+    AuthGuard,
+    PersonResolver
   ]
 })
 export class CoreModule {

@@ -3,8 +3,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { combineLatest, EMPTY } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Planet } from 'src/app/shared/models';
-import { FavoriteService } from 'src/app/core/favorite.service';
-import { PlanetService } from 'src/app/core/planet.service';
+import { FavoriteService } from 'src/app/core/services/favorite.service';
+import { PlanetService } from 'src/app/core/services/planet.service';
 
 @Component({
   templateUrl: './planet-list.component.html',

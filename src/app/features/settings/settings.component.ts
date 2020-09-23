@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SettingService } from 'src/app/core/settings.services';
+import { SettingService } from 'src/app/core/services/settings.services';
 
 @Component({
   templateUrl: './settings.component.html',

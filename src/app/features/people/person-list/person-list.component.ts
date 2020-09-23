@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
-import { PersonService } from '../../core/person.service';
+import { PersonService } from 'src/app/core/services/person.service';
 import { combineLatest, EMPTY } from 'rxjs';
-import { catchError, filter, map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Person } from 'src/app/shared/models';
-import { FavoriteService } from '../../core/favorite.service';
-
+import { FavoriteService } from 'src/app/core/services/favorite.service';
+import { environment as env } from 'src/environments/environment';
 
 @Component({
   templateUrl: './person-list.component.html',
@@ -17,10 +17,10 @@ export class PersonListComponent {
   errorMessage = '';
   filter = '';
   page = 1;
-  size = 5;
+  size = env.pageSize;
 
   vm$ = combineLatest([this.personService.people$]).pipe(
-    map(([ people]) => ({ people })),
+    map(([people]) => ({ people })),
     catchError(err => {
       this.errorMessage = err;
       return EMPTY;
@@ -41,7 +41,7 @@ export class PersonListComponent {
   }
 
   clear() {
-    this.size = 5;
+    this.size = env.pageSize;
     this.page = 1;
     this.filter = '';
     this.refresh();
@@ -52,7 +52,7 @@ export class PersonListComponent {
     this.refresh();
   }
 
-  onSelected(personId: string): void {
+  onSelected(personId: number): void {
     this.personService.changeSelectedPerson(personId);
   }
 

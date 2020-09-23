@@ -1,20 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { Observable, combineLatest, Subject, BehaviorSubject } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { CachingService } from 'src/app/shared/caching/caching.service';
-import { FavoriteService } from 'src/app/core/favorite.service';
+import { FavoriteService } from 'src/app/core/services/favorite.service';
 import { BaseService } from 'src/app/shared/base.service';
-import { Person, Wrapper } from 'src/app/shared/models';
+import { Person } from 'src/app/shared/models';
 import { PlanetService } from './planet.service';
+import { environment as env } from 'src/environments/environment';
 
 @Injectable()
 export class PersonService extends BaseService<Person> {
 
+  private personUrl = `${env.apiUrl}/api/people`;
 
-  private personSelectedAction = new Subject<string>();
-  personSelectedAction$ = this.personSelectedAction.asObservable();
+  private personSelectedAction = new BehaviorSubject<number>(1);
+  selectedPerson$ = this.personSelectedAction.asObservable();
 
   people$ = combineLatest([
     this.planetService.allItems$,
@@ -27,6 +29,7 @@ export class PersonService extends BaseService<Person> {
             // custom mapping logic
             const personList = people.map(person => ({
               ...person,
+              id: +person.url.split('/')[5],
               isFavorite: favorites.findIndex(x => x.url === person.url) > -1,
               homeworld_name: planets.find(p => p.url === person.homeworld)
                 .name
@@ -39,12 +42,19 @@ export class PersonService extends BaseService<Person> {
       catchError(this.handleError)
     );
 
-  selectedPerson$ = combineLatest([this.personSelectedAction$, this.people$]).pipe(
-    map(([personId, people]) => people.results.find(person => person.url === personId)),
-    catchError(this.handleError)
-  );
+  getPerson(id: number): Observable<Person> {
+    const url = `${this.personUrl}/${id}`;
+    return this.http.get<Person>(url)
+      .pipe(
+        map(person => ({
+          ...person,
+          id: +person.url.split('/')[5],
+        })),
+        catchError(this.handleError)
+      );
+  }
 
-  changeSelectedPerson(personId: string): void {
+  changeSelectedPerson(personId: number): void {
     this.personSelectedAction.next(personId);
   }
 

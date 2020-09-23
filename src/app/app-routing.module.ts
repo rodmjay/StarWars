@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
+import { AuthGuard } from './core/guards/auth.guard';
 import { WelcomeComponent } from './home/welcome.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 
@@ -32,6 +32,11 @@ import { PageNotFoundComponent } from './page-not-found.component';
         path: 'favorites',
         loadChildren: () =>
           import('./features/favorites/favorite.module').then(m => m.FavoritesModule)
+      },
+      {
+        path: 'user',
+        loadChildren: () =>
+          import('./features/user/user.module').then(m => m.UserModule)
       },
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: '**', component: PageNotFoundComponent }

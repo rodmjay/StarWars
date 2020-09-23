@@ -3,8 +3,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { combineLatest, EMPTY } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Starship } from 'src/app/shared/models';
-import { FavoriteService } from '../../core/favorite.service';
-import { StarshipService } from '../../core/starship.service';
+import { FavoriteService } from '../../core/services/favorite.service';
+import { StarshipService } from '../../core/services/starship.service';
 
 @Component({
   templateUrl: './starship-list.component.html',

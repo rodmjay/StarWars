@@ -9,6 +9,7 @@ import { PlanetService } from './services/planet.service';
 import { SettingService } from './services/settings.services';
 import { StarshipService } from './services/starship.service';
 import { PersonResolver } from './resolvers/person-resolver.service';
+import { CachingService } from './services/caching.service';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { PersonResolver } from './resolvers/person-resolver.service';
     SettingService,
     AuthService,
     AuthGuard,
-    PersonResolver
+    PersonResolver,
+    CachingService
   ]
 })
 export class CoreModule {

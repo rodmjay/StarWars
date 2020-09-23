@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Person, PersonResolved } from 'src/app/shared/models';
+import { Person, PersonResolved } from 'src/app/core/models';
 
 
 @Component({

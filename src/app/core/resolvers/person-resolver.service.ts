@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Person, PersonResolved } from 'src/app/shared/models';
+import { Person, PersonResolved } from 'src/app/core/models';
 import { PersonService } from '../services/person.service';
 
 @Injectable()
@@ -14,7 +14,6 @@ export class PersonResolver implements Resolve<PersonResolved> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
     : PersonResolved | Observable<PersonResolved> | Promise<PersonResolved> {
 
-    console.log('resolving person...');
     const id = route.paramMap.get('id');
 
     if (isNaN(+id)) {

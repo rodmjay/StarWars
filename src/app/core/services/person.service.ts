@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable, combineLatest, Subject, BehaviorSubject } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { CachingService } from 'src/app/shared/caching/caching.service';
+import { CachingService } from 'src/app/core/services/caching.service';
 import { FavoriteService } from 'src/app/core/services/favorite.service';
-import { BaseService } from 'src/app/shared/base.service';
-import { Person } from 'src/app/shared/models';
+import { BaseService } from 'src/app/core/bases/base.service';
+import { Person } from 'src/app/core/models';
 import { PlanetService } from './planet.service';
 import { environment as env } from 'src/environments/environment';
 

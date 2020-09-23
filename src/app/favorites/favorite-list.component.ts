@@ -2,9 +2,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { FavoriteService } from '../../core/services/favorite.service';
+import { FavoriteService } from '../core/services/favorite.service';
 import { Options } from 'sortablejs';
-import { Person, Planet } from 'src/app/shared/models';
+import { Person, Planet } from 'src/app/core/models';
 
 @Component({
   templateUrl: './favorite-list.component.html',

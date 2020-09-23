@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CachingService } from '../../shared/caching/caching.service';
-import { Settings } from '../../shared/models';
+import { CachingService } from './caching.service';
+import { Settings } from '../models';
 
 @Injectable()
 export class SettingService {

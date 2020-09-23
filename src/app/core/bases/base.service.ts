@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, empty, Observable, of, throwError } from 'rxjs';
 import { catchError, expand, map, reduce } from 'rxjs/operators';
-import { CachingService } from 'src/app/shared/caching/caching.service';
-import { FavoriteService } from '../core/services/favorite.service';
-import { Response, Wrapper } from '../shared/models';
-import { environment } from './../../environments/environment';
+import { CachingService } from 'src/app/core/services/caching.service';
+import { FavoriteService } from '../services/favorite.service';
+import { Response, Wrapper } from '../models';
+import { environment } from 'src/environments/environment';
 
 export class BaseService<T> {
 

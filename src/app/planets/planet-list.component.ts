@@ -2,9 +2,11 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { combineLatest, EMPTY } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Planet } from 'src/app/shared/models';
+import { Planet } from 'src/app/core/models';
 import { FavoriteService } from 'src/app/core/services/favorite.service';
 import { PlanetService } from 'src/app/core/services/planet.service';
+
+import { environment as env} from 'src/environments/environment';
 
 @Component({
   templateUrl: './planet-list.component.html',
@@ -17,7 +19,7 @@ export class PlanetListComponent {
   errorMessage = '';
   filter = '';
   page = 1;
-  size = 5;
+  size = env.pageSize;
 
   vm$ = combineLatest([this.planetService.planets$])
     .pipe(
@@ -46,7 +48,7 @@ export class PlanetListComponent {
   }
 
   clear() {
-    this.size = 5;
+    this.size = env.pageSize;
     this.page = 1;
     this.filter = '';
     this.refresh();

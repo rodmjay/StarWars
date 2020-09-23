@@ -11,32 +11,32 @@ import { PageNotFoundComponent } from './page-not-found.component';
       {
         path: 'people',
         loadChildren: () =>
-          import('./features/people/person.module').then(m => m.PersonModule)
+          import('./people/person.module').then(m => m.PersonModule)
       },
       {
         path: 'planets',
         loadChildren: () =>
-          import('./features/planets/planet.module').then(m => m.PlanetModule)
+          import('./planets/planet.module').then(m => m.PlanetModule)
       },
       {
         path: 'settings',
         loadChildren: () =>
-          import('./features/settings/settings.module').then(m => m.SettingsModule)
+          import('./settings/settings.module').then(m => m.SettingsModule)
       },
       {
         path: 'starships',
         loadChildren: () =>
-          import('./features/starships/starship.module').then(m => m.StarshipModule)
+          import('./starships/starship.module').then(m => m.StarshipModule)
       },
       {
         path: 'favorites',
         loadChildren: () =>
-          import('./features/favorites/favorite.module').then(m => m.FavoritesModule)
+          import('./favorites/favorite.module').then(m => m.FavoritesModule)
       },
       {
         path: 'user',
         loadChildren: () =>
-          import('./features/user/user.module').then(m => m.UserModule)
+          import('./user/user.module').then(m => m.UserModule)
       },
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: '**', component: PageNotFoundComponent }

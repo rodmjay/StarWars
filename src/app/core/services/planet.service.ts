@@ -4,9 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
-import { Planet } from '../../shared/models';
-import { CachingService } from 'src/app/shared/caching/caching.service';
-import { BaseService } from '../../shared/base.service';
+import { Planet } from '../models';
+import { CachingService } from 'src/app/core/services/caching.service';
+import { BaseService } from '../bases/base.service';
 import { FavoriteService } from './favorite.service';
 
 @Injectable()

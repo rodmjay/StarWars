@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CachingService } from 'src/app/shared/caching/caching.service';
-import { Person, Planet, Starship } from 'src/app/shared/models';
+import { CachingService } from 'src/app/core/services/caching.service';
+import { Person, Planet, Starship } from 'src/app/core/models';
 
 @Injectable()
 export class FavoriteService {

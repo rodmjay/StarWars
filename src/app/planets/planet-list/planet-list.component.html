@@ -30,7 +30,9 @@
         </thead>
         <tbody *ngFor="let planet of vm.planets.results">
           <tr>
-            <td>{{ planet.name }}</td>
+            <td>
+              <a [routerLink]="[planet.id]"> {{ planet.name }}</a>
+            </td>
             <td>
               <button *ngIf="planet.isFavorite" class="btn" (click)="removeFavorite(planet)">Remove Favorite</button>
               <button *ngIf="!planet.isFavorite" class="btn" (click)="addFavorite(planet)">Add Favorite</button>

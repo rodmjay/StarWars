@@ -33,6 +33,11 @@ export interface PersonResolved {
   error?: any;
 }
 
+export interface PlanetResolved {
+  planet: Planet;
+  error?: any;
+}
+
 export interface ViewModel<T> {
   model: T;
   error?: any;
@@ -41,6 +46,7 @@ export interface ViewModel<T> {
 export interface Planet {
   name: string;
   url: string;
+  id: number;
 }
 
 export interface Settings {

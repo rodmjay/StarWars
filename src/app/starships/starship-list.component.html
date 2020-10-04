@@ -67,6 +67,11 @@
         </tbody>
       </table>
     </div>
+    <sw-pagination
+      [page]="page"
+      [totalPages]="vm.starships.pages"
+      (pageChanged)="setPage($event)"
+    ></sw-pagination>
   </div>
 </div>
 

@@ -60,9 +60,6 @@ export class PlanetListComponent {
   removeFavorite(planet: Planet) {
     this.favorites.removeFavoritePlanet(planet);
   }
-  logPlanets() {
-    this.planetService.filterPlanet("");
-  }
 
   constructor(
     private planetService: PlanetService,

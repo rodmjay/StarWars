@@ -56,10 +56,6 @@ export class PlanetService extends BaseService<Planet> {
     );
   }
 
-  filterPlanet(query: string) {
-    console.log();
-  }
-
   constructor(
     http: HttpClient,
     caching: CachingService,

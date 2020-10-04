@@ -1,7 +1,9 @@
 <div>
-	<a [routerLink]="['/people']" queryParamsHandling="preserve">Back</a>
+  <a [routerLink]="['/people']" queryParamsHandling="preserve">Back</a>
 
-	<pre>
+  <pre>
 		{{ person | json }}
-	</pre>
+  </pre>
 </div>
+<div>{{person.name}}</div>
+<p></p>

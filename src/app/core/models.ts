@@ -1,4 +1,3 @@
-
 export interface Response<T> {
   results: T;
   count: number;
@@ -16,6 +15,12 @@ export interface Wrapper<T> {
 export interface Starship {
   name: string;
   url: string;
+  id: number;
+}
+
+export interface StarshipResolved {
+  starship: Starship;
+  error?: any;
 }
 
 /* Defines the person entity */

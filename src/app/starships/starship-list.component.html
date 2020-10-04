@@ -1,22 +1,36 @@
 <div class="card" *ngIf="vm$ | async as vm">
   <div class="card-header">
-
     {{ pageTitle }}
 
-    <a style="float: right" [routerLink]="['/favorites']">
+    <a style="float: right;" [routerLink]="['/favorites']">
       {{vm.starships.totalFavorites}}
     </a>
-
   </div>
 
   <div class="card-body">
-
     <div class="input-group">
-      <input [(ngModel)]='filter' type="text" class="form-control" placeholder="Starship Name">
+      <input
+        [(ngModel)]="filter"
+        type="text"
+        class="form-control"
+        placeholder="Starship Name"
+      />
 
       <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" (click)="search(filter.value)">Search</button>
-        <button class="btn btn-outline-secondary" type="button" (click)="clear()">Clear</button>
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="search(filter.value)"
+        >
+          Search
+        </button>
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="clear()"
+        >
+          Clear
+        </button>
       </div>
     </div>
 
@@ -30,16 +44,34 @@
         </thead>
         <tbody *ngFor="let starship of vm.starships.results">
           <tr>
-            <td>{{ starship.name }}</td>
             <td>
-              <button *ngIf="starship.isFavorite" class="btn" (click)="removeFavorite(starship)">Remove Favorite</button>
-              <button *ngIf="!starship.isFavorite" class="btn" (click)="addFavorite(starship)">Add Favorite</button>
+              <a [routerLink]="[starship.id]"> {{ starship.name }}</a>
+            </td>
+            <td>
+              <button
+                *ngIf="starship.isFavorite"
+                class="btn"
+                (click)="removeFavorite(starship)"
+              >
+                Remove Favorite
+              </button>
+              <button
+                *ngIf="!starship.isFavorite"
+                class="btn"
+                (click)="addFavorite(starship)"
+              >
+                Add Favorite
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
+    <sw-pagination
+      [page]="page"
+      [totalPages]="vm.starships.pages"
+      (pageChanged)="setPage($event)"
+    ></sw-pagination>
   </div>
 </div>
 

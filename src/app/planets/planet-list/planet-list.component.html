@@ -1,22 +1,36 @@
 <div class="card" *ngIf="vm$ | async as vm">
   <div class="card-header">
-
     {{ pageTitle }}
 
-    <a style="float: right" [routerLink]="['/favorites']">
+    <a style="float: right;" [routerLink]="['/favorites']">
       {{vm.planets.totalFavorites}}
     </a>
-
   </div>
-
   <div class="card-body">
-
     <div class="input-group">
-      <input [(ngModel)]='filter' type="text" class="form-control" placeholder="Planet Name">
+      <input
+        [(ngModel)]="filter"
+        type="text"
+        class="form-control"
+        placeholder="Planet Name"
+        (input)="search(filter.value)"
+      />
 
       <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" (click)="search(filter.value)">Search</button>
-        <button class="btn btn-outline-secondary" type="button" (click)="clear()">Clear</button>
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="search(filter.value)"
+        >
+          Search
+        </button>
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="clear()"
+        >
+          Clear
+        </button>
       </div>
     </div>
 
@@ -34,18 +48,31 @@
               <a [routerLink]="[planet.id]"> {{ planet.name }}</a>
             </td>
             <td>
-              <button *ngIf="planet.isFavorite" class="btn" (click)="removeFavorite(planet)">Remove Favorite</button>
-              <button *ngIf="!planet.isFavorite" class="btn" (click)="addFavorite(planet)">Add Favorite</button>
+              <button
+                *ngIf="planet.isFavorite"
+                class="btn"
+                (click)="removeFavorite(planet)"
+              >
+                Remove Favorite
+              </button>
+              <button
+                *ngIf="!planet.isFavorite"
+                class="btn"
+                (click)="addFavorite(planet)"
+              >
+                Add Favorite
+              </button>
             </td>
           </tr>
-
         </tbody>
       </table>
     </div>
 
-
-    <sw-pagination [page]="page" [totalPages]="vm.planets.pages" (pageChanged)="setPage($event)"></sw-pagination>
-
+    <sw-pagination
+      [page]="page"
+      [totalPages]="vm.planets.pages"
+      (pageChanged)="setPage($event)"
+    ></sw-pagination>
   </div>
 </div>
 
